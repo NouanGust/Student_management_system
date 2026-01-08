@@ -1,0 +1,69 @@
+============================================================
+RELATÓRIO DIÁRIO DE ALUNOS
+============================================================
+Data: 2025-11-08
+Dia: Sábado
+Total de alunos: 14
+============================================================
+
+
+⏰ HORÁRIO: 13:00 - 17:00
+------------------------------------------------------------
+
+[✓] PRESENTE - Guilherme Ferreira Rodrigues
+   Curso: 3D
+
+[✓] PRESENTE - Mateus Gabriel Santos
+   Curso: 3D
+
+[✓] PRESENTE - Thalles Alexndre Conceição de Nascimento
+   Curso: 2D
+
+
+⏰ HORÁRIO: 8:00 - 12:00
+------------------------------------------------------------
+
+[✓] PRESENTE - Rafaelle Nakaiama Araújo Silveira
+   Curso: design
+
+
+⏰ HORÁRIO: Sem horário
+------------------------------------------------------------
+
+[✓] PRESENTE - Bernardo Oliveira Pimentão 
+   Curso: 2D
+
+[✓] PRESENTE - Graciele Belem Pacheco 
+   Curso: design
+
+[ ] NÃO MARCADO - Guilherme Eduardo de Souza Leitão 
+   Curso: design
+
+[✓] PRESENTE - Luiz Eduardo de Almeida Couto Filho
+   Curso: design
+
+[ ] NÃO MARCADO - Lônatas Daniel G. de Sousa 
+   Curso: design
+
+[✓] PRESENTE - Murilo
+   Curso: Programação
+
+[ ] NÃO MARCADO - Samuel Fernando Ambrósio Assis Rocha 
+   Curso: Design
+
+[✓] PRESENTE - Uirá Frazão da Silva
+   Curso: 2D
+
+[✓] PRESENTE - Wanderson Belforte Mendes
+   Curso: 2D
+
+[✓] PRESENTE - johnatan
+   Curso: 2D
+
+
+============================================================
+RESUMO:
+  Presenças: 11
+  Faltas: 0
+  Não marcados: 3
+============================================================

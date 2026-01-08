@@ -1,0 +1,27 @@
+============================================================
+RELATORIO DIARIO - 11/12/2025 (Quinta)
+============================================================
+TOTAL DE ALUNOS: 5
+------------------------------------------------------------
+[+] Presentes:    0
+[x] Faltas:       0
+[ ] Pendentes:    5
+============================================================
+
+ALUNO: André Rupiati Carneiro | CURSO: Game 2D | TURMA: 16:00 - 18:00
+SITUACAO: PENDENTE [ ]
+------------------------------------------------------------
+ALUNO: Luiz Henrique | CURSO: Design | TURMA: 19:00 - 21:00
+SITUACAO: PENDENTE [ ]
+------------------------------------------------------------
+ALUNO: Davi | CURSO: 2D | TURMA: 19:00 - 21:00 
+SITUACAO: PENDENTE [ ]
+------------------------------------------------------------
+ALUNO: Alexandre Junio | CURSO: Design | TURMA: 19:00-21:00
+SITUACAO: PENDENTE [ ]
+------------------------------------------------------------
+ALUNO: johnatan | CURSO: 2D | TURMA: Sem horario
+SITUACAO: PENDENTE [ ]
+------------------------------------------------------------
+
+Gerado automaticamente pelo Sistema de Alunos

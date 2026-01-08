@@ -1,0 +1,54 @@
+============================================================
+RELATORIO DIARIO - 22/12/2025 (Segunda)
+============================================================
+TOTAL DE ALUNOS: 14
+------------------------------------------------------------
+[+] Presentes:    7
+[x] Faltas:       4
+[ ] Pendentes:    3
+============================================================
+
+ALUNO: Isabela Oliveirade Lima | CURSO: 3D | TURMA: 14:00 - 16:00
+SITUACAO: FALTA [x]
+------------------------------------------------------------
+ALUNO: Maria Clara | CURSO: 3D | TURMA: 14:00 - 16:00
+SITUACAO: FALTA [x]
+------------------------------------------------------------
+ALUNO: Nicole Vicentine França | CURSO: 3D | TURMA: 14:00 - 16:00
+SITUACAO: FALTA [x]
+------------------------------------------------------------
+ALUNO: Ítalo | CURSO: 3D | TURMA: 14:00 - 18:00
+SITUACAO: FALTA [x]
+------------------------------------------------------------
+ALUNO: Gabriel de Souza | CURSO: 3D | TURMA: 16:00 - 18:00
+SITUACAO: PRESENTE [+]
+------------------------------------------------------------
+ALUNO: João Gabriel Nabofarzan | CURSO: 2D | TURMA: 16:00 - 18:00
+SITUACAO: PRESENTE [+]
+------------------------------------------------------------
+ALUNO: João Pedro Oliveira | CURSO: Design | TURMA: 16:00 - 18:00
+SITUACAO: PRESENTE [+]
+------------------------------------------------------------
+ALUNO: Saulo Cursino Santos | CURSO: Design | TURMA: 19:00 - 21:00
+SITUACAO: PRESENTE [+]
+------------------------------------------------------------
+ALUNO: Caroline | CURSO: 3D | TURMA: Sem horario
+SITUACAO: PRESENTE [+]
+------------------------------------------------------------
+ALUNO: Cecília Bnadeira Peterka  | CURSO: 2D | TURMA: Sem horario
+SITUACAO: PENDENTE [ ]
+------------------------------------------------------------
+ALUNO: Gabriel Ribeiro de Oliveira | CURSO: 2D | TURMA: Sem horario
+SITUACAO: PENDENTE [ ]
+------------------------------------------------------------
+ALUNO: Gustavo Gois de Lima | CURSO: Design | TURMA: Sem horario
+SITUACAO: PRESENTE [+]
+------------------------------------------------------------
+ALUNO: Vinícius Bandeira Perteka  | CURSO: 2D | TURMA: Sem horario
+SITUACAO: PENDENTE [ ]
+------------------------------------------------------------
+ALUNO: johnatan | CURSO: 2D | TURMA: Sem horario
+SITUACAO: PRESENTE [+]
+------------------------------------------------------------
+
+Gerado automaticamente pelo Sistema de Alunos
