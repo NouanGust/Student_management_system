@@ -35,7 +35,7 @@ class CustomButton(ft.ElevatedButton):
         text_color = ft.colors.ON_PRIMARY if not color else ft.colors.WHITE 
         
         super().__init__(
-            text=text,
+            text=text.upper(), # Texto em caixa alta fica mais profissional em botões
             icon=icon,
             on_click=on_click,
             width=width or 200,
@@ -43,7 +43,9 @@ class CustomButton(ft.ElevatedButton):
             style=ft.ButtonStyle(
                 color=text_color,
                 bgcolor=bg_color,
-                shape=ft.RoundedRectangleBorder(radius=8),
+                shape=ft.RoundedRectangleBorder(radius=12), # Mais arredondado
+                elevation=2, # Sombra leve
+                text_style=ft.TextStyle(weight=ft.FontWeight.BOLD, letter_spacing=0.5), # Tipografia forte
                 icon_color=text_color
             )
         )

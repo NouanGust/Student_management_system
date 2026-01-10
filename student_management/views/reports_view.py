@@ -32,7 +32,7 @@ class ReportsView:
     
     def build(self):
         return ft.Column([
-            ft.Text("📊 Relatórios", size=24, weight=ft.FontWeight.BOLD),
+            ft.Text("Relatórios", size=24, weight=ft.FontWeight.BOLD),
             ft.Divider(),
             CustomButton(
                 "Gerar Relatório Diário",

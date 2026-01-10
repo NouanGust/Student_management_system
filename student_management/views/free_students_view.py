@@ -158,7 +158,6 @@ class FreeStudentsView:
             ft.Container(
                 content=ft.Row([
                     ft.Row([
-                        ft.Icon(ft.icons.ROCKET_LAUNCH, color=ft.colors.ON_SURFACE),
                         ft.Text("Alunos Gratuitos", size=24, weight=ft.FontWeight.BOLD, color=ft.colors.ON_SURFACE),
                     ]),
                     CustomButton("Adicionar", on_click=self.open_add_dialog, icon=ft.icons.PERSON_ADD, width=150)

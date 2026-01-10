@@ -66,7 +66,7 @@ class BackupView:
         return ft.Column([
             ft.Container(
                 content=ft.Row([
-                    ft.Text("💾 Gerenciador de Backups", size=24, weight=ft.FontWeight.BOLD, color=ft.colors.ON_SURFACE),
+                    ft.Text("Gerenciador de Backups", size=24, weight=ft.FontWeight.BOLD, color=ft.colors.ON_SURFACE),
                     CustomButton("Novo Backup", icon=ft.icons.ADD_TO_PHOTOS, on_click=self.handle_create_backup, width=200, color=ft.colors.GREEN)
                 ], alignment=ft.MainAxisAlignment.SPACE_BETWEEN),
                 padding=ft.padding.only(bottom=20)

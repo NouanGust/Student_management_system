@@ -37,7 +37,7 @@ class MainView:
         
         # Navegação
         self.current_view = "daily_summary"
-        self.content_container = ft.Container(expand=True)
+        self.content_container = ft.Container(expand=True, padding= 20)
         self.nav_rail = None
         
         self.update_content()

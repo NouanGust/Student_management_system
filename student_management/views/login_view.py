@@ -33,7 +33,7 @@ class LoginView:
             filled=True,
             text_size=14,
             content_padding=20,
-            on_submit=self.handle_login # Enter para logar
+            on_submit=self.handle_login # Usando os atalhos para logar com "Enter"
         )
         
         # Texto de erro animado
@@ -53,7 +53,7 @@ class LoginView:
             self.show_error("Por favor, preencha todos os campos.")
             return
             
-        if self.auth.verify_login(username, password):
+        if self.auth.login(username, password):
             self.on_login_success(username)
         else:
             self.show_error("Usuário ou senha incorretos.")
@@ -75,6 +75,42 @@ class LoginView:
         self.error_text.value = message
         self.error_text.update()
         # Pequena animação de "tremor" ou flash poderia ser adicionada aqui
+
+    def open_forgot_password_dialog(self, e):
+        d_user = ft.TextField(label = "Usuário", width=250)
+        d_pass = ft.TextField(label = "Nova Senha", password=True, can_reveal_password=True, width=250)
+        d_key = ft.TextField(label="Chave Mestra (Admin Key)", password=True, width=250)
+
+        def confirm_reset(e):
+            if not d_user.value or not d_pass.value or not d_key.value:
+                SnackBarMessage.show(self.pag, "Preencha os campos!", False)
+                return
+            
+            if self.auth.reset_password(d_user.value, d_pass.value, d_key.value):
+                SnackBarMessage.show(self.page, "Senha redefinida com sucecco!", True)
+                self.page.dialog.open = False
+                self.page.update()
+            else:
+                SnackBarMessage.show(self.page, "Falha: Chave incorreta ou usuário inexistente.")
+            
+        dialog = ft.AlertDialog(
+            title=ft.Text("Redefinir senha"),
+            content=ft.Column([
+                ft.Text("Digite sua chave de segurança para criar uma nova senha.", size=12),
+                d_user,
+                d_pass,
+                d_key
+            ], tight = True),
+            actions=[
+                ft.TextButton("Cancelar", on_click=lambda e: setattr(self.page.dialog, 'open', False) or self.page.update()),
+                ft.ElevatedButton("Redefinir", on_click=confirm_reset, bgcolor=ft.colors.RED_600, color=ft.colors.WHITE)
+            ]
+        )
+
+        self.page.dialog = dialog
+        dialog.open = True
+        self.page.update()
+
 
     def build(self):
         # Container do Formulário (O Cartão Branco)
@@ -110,11 +146,11 @@ class LoginView:
                     )
                 ),
                 
-                ft.TextButton(
-                    "Criar nova conta",
-                    on_click=self.handle_register,
-                    style=ft.ButtonStyle(color=ft.colors.BLUE_GREY_400)
-                )
+                ft.Row([
+                    ft.TextButton("Criar conta", on_click=self.handle_register),
+                    ft.Text("|", color=ft.colors.GREY_400),
+                    ft.TextButton("Esqueci a senha", on_click=self.open_forgot_password_dialog, style=ft.ButtonStyle(color=ft.colors.RED_400))
+                ], alignment=ft.MainAxisAlignment.CENTER, spacing=5)
             ], horizontal_alignment=ft.CrossAxisAlignment.CENTER, spacing=5),
             
             width=400,

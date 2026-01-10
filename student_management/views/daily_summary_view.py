@@ -48,7 +48,6 @@ class DailySummaryView:
             )
             student_cards.append(card)
 
-        # CABEÇALHO ADAPTÁVEL AO TEMA
         header = ft.Container(
             content=ft.Row([
                 self.create_stat("Total", total, ft.colors.ON_PRIMARY_CONTAINER),
@@ -57,7 +56,6 @@ class DailySummaryView:
                 self.create_stat("Pendentes", total - (present_count + absent_count), ft.colors.TERTIARY),
             ], alignment=ft.MainAxisAlignment.SPACE_EVENLY),
             padding=20,
-            # Usa a cor de container primário do tema (suave no claro, contrastante no escuro)
             bgcolor=ft.colors.PRIMARY_CONTAINER, 
             border_radius=15,
             border=ft.border.all(1, ft.colors.OUTLINE_VARIANT)
