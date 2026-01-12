@@ -10,9 +10,10 @@ class StudentManagementApp:
     def __init__(self, page: ft.Page):
         self.page = page
         self.page.title = "Sistema de Controle de Alunos"
-        self.page.window_width = 1200
-        self.page.window_height = 800
+        self.page.window.width = 1200
+        self.page.window.height = 800
         self.page.padding = 0
+        # self.page.window_icon = "student_management/assets/icon.png"
         
         # Fontes
         self.page.fonts = {
@@ -91,4 +92,4 @@ def main(page: ft.Page):
     app = StudentManagementApp(page)
 
 if __name__ == "__main__":
-    ft.app(target=main)
+    ft.app(target=main, assets_dir="assets")

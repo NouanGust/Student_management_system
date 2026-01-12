@@ -2,31 +2,63 @@ import flet as ft
 
 class CustomAppBar(ft.AppBar):
     def __init__(self, title: str, username: str = "", on_logout=None):
+        user_pill = ft.Container(
+            content = ft.Row([
+                ft.CircleAvatar(
+                    content=ft.Text(username[0].upper() if username else "U"),
+                    bgcolor = ft.colors.PRIMARY,
+                    radius=16,
+                ),
+                ft.Column([
+                    ft.Text(username, weight=ft.FontWeight.BOLD, size =12),
+                    ft.Text("Online", size=10, color=ft.colors.GREEN, weight=ft.FontWeight.W_500)
+                ], spacing=0, alignment=ft.MainAxisAlignment.CENTER),
+            ], alignment=ft.MainAxisAlignment.START, spacing=10),
+
+            padding=ft.padding.only(left=5, right=15, top=5, bottom=5),
+            bgcolor=ft.colors.SURFACE_VARIANT,
+            border_radius=30,
+            border = ft.border.all(1, ft.colors.OUTLINE_VARIANT),
+
+            animate=ft.animation.Animation(300, ft.AnimationCurve.EASE_IN_OUT),
+        )
         actions = []
         if username:
-            actions.append(
-                ft.Row([
-                    ft.Icon(ft.icons.PERSON, size=16, color=ft.colors.ON_PRIMARY),
-                    ft.Text(f"{username}", size=14, color=ft.colors.ON_PRIMARY)
-                ], alignment=ft.MainAxisAlignment.CENTER)
-            )
-            actions.append(ft.VerticalDivider(width=10, color=ft.colors.TRANSPARENT)) # Espaçamento
+            actions.append(user_pill)
+            actions.append(ft.VerticalDivider(width=20, color=ft.colors.TRANSPARENT)) # Espaçamento
             
         if on_logout:
             actions.append(
                 ft.IconButton(
-                    ft.icons.LOGOUT,
+                    ft.icons.LOGOUT_ROUNDED,
                     tooltip="Sair",
-                    icon_color=ft.colors.ON_PRIMARY,
-                    on_click=on_logout
+                    icon_color=ft.colors.ERROR,
+                    on_click=on_logout,
+                    style=ft.ButtonStyle(
+                        bgcolor={"": ft.colors.with_opacity(0.1, ft.colors.ERROR)},
+                        shape=ft.CircleBorder(),
+                    )
                 )
             )
+            actions.append(ft.VerticalDivider(width=10, color=ft.colors.TRANSPARENT))
         
         super().__init__(
-            title=ft.Text(title, size=20, weight=ft.FontWeight.BOLD, color=ft.colors.ON_PRIMARY),
+            title=ft.Row([
+                ft.Icon(ft.icons.SCHOOL_ROUNDED, color=ft.colors.PRIMARY, size=28),
+                ft.Text(title, size=20, weight=ft.FontWeight.W_600, color=ft.colors.ON_SURFACE, font_family="Poppins"),
+            ], spacing=15),
+
             center_title=False,
-            bgcolor=ft.colors.PRIMARY,
-            actions=actions
+
+            bgcolor=ft.colors.SURFACE,
+            elevation=0,
+            shape=ft.Border(
+                bottom=ft.BorderSide(1, ft.colors.OUTLINE_VARIANT)
+            ),
+
+            actions=actions,
+            toolbar_height=70,
+            
         )
 
 class CustomButton(ft.ElevatedButton):

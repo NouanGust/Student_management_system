@@ -35,4 +35,6 @@ exe = EXE(
     target_arch=None,
     codesign_identity=None,
     entitlements_file=None,
+    version='C:\\Users\\ALUNO1~1\\AppData\\Local\\Temp\\0e9f4f43-aea6-4b3f-b3c0-bf83d9ceebfe',
+    icon=['c:\\Users\\aluno 1\\Nohan\\Student_management_system\\student_management\\assets\\icon.png'],
 )

@@ -168,22 +168,21 @@ class LoginView:
             animate_offset=ft.animation.Animation(600, ft.AnimationCurve.ELASTIC_OUT),
         )
 
-        # Fundo Gradiente Elegante
         background = ft.Container(
             content=ft.Row([
-                # Coluna vazia apenas para centralizar o card no meio da tela
                 form_card
             ], alignment=ft.MainAxisAlignment.CENTER),
             
             expand=True,
             alignment=ft.alignment.center,
+            padding=30,
             gradient=ft.LinearGradient(
                 begin=ft.alignment.top_left,
                 end=ft.alignment.bottom_right,
                 colors=[
-                    "#4158D0", # Azul Vibrante
-                    "#C850C0", # Roxo/Rosa
-                    "#FFCC70", # Amarelo Suave (dá um toque de luz)
+                    "#4158D0",
+                    "#C850C0",
+                    "#FFCC70", 
                 ],
                 rotation=0.8
             )

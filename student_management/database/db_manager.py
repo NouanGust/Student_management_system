@@ -351,3 +351,107 @@ class DatabaseManager:
             "progress": progress,
             "next_level_xp": next_level_xp
         }
+
+    # --- METÓDOS DE RELATÓRIO ---
+    def get_daily_report_data(self, date_str, day_name_fragment):
+        """
+        Gera o relatório do dia:
+        1. Pega todos os alunos que tem aula naquele dia da semana (ex: 'seg').
+        2. Cruza com a tabela de presença para ver quem veio, faltou ou não tem registro.
+        """
+        conn = self.get_connection()
+        conn.row_factory = sqlite3.Row
+        cursor = conn.cursor()
+
+        # 1. Busca alunos agendados para este dia da semana
+        # O LIKE %fragment% busca 'seg' dentro de 'Seg/Qua', por exemplo.
+        cursor.execute("SELECT id, name, course, class_time FROM students WHERE active=1 AND course_days LIKE ?", (f"%{day_name_fragment}%",))
+        scheduled_students = [dict(row) for row in cursor.fetchall()]
+
+        report_data = []
+        present_count = 0
+        absent_count = 0
+        pending_count = 0
+
+        for student in scheduled_students:
+            # 2. Busca o registro de presença para a data específica
+            cursor.execute("SELECT present, note FROM attendance WHERE student_id = ? AND date = ?", (student['id'], date_str))
+            record = cursor.fetchone()
+
+            status = "Pendente"
+            note = ""
+
+            if record:
+                if record['present']:
+                    status = "Presente"
+                    present_count += 1
+                else:
+                    status = "Falta"
+                    absent_count += 1
+                note = record['note']
+            else:
+                pending_count += 1
+
+            report_data.append({
+                "name": student['name'],
+                "course": student['course'],
+                "time": student['class_time'],
+                "status": status,
+                "note": note
+            })
+
+        conn.close()
+
+        # Ordena por horário
+        report_data.sort(key=lambda x: x['time'] or "23:59")
+
+        return {
+            "date": date_str,
+            "summary": {
+                "total": len(scheduled_students),
+                "present": present_count,
+                "absent": absent_count,
+                "pending": pending_count
+            },
+            "details": report_data
+        }
+
+    def get_monthly_report_data(self, month, year):
+        """Gera estatísticas gerais do mês"""
+        conn = self.get_connection()
+        cursor = conn.cursor()
+        
+        # Formato da data no banco é YYYY-MM-DD
+        # Vamos filtrar onde o strftime do mês e ano batem
+        start_date = f"{year}-{month:02d}-01"
+        # Truque simples para fim do mês: pega o primeiro dia do próximo mês e subtrai um dia, 
+        # ou apenas busca pelo prefixo da string 'YYYY-MM'
+        month_prefix = f"{year}-{month:02d}"
+        
+        cursor.execute("SELECT COUNT(*) FROM attendance WHERE date LIKE ? AND present = 1", (f"{month_prefix}%",))
+        total_presents = cursor.fetchone()[0]
+        
+        cursor.execute("SELECT COUNT(*) FROM attendance WHERE date LIKE ? AND present = 0", (f"{month_prefix}%",))
+        total_absents = cursor.fetchone()[0]
+        
+        # Busca alunos com mais faltas no mês (Top 5)
+        cursor.execute('''
+            SELECT s.name, COUNT(a.id) as faltas
+            FROM attendance a
+            JOIN students s ON a.student_id = s.id
+            WHERE a.date LIKE ? AND a.present = 0
+            GROUP BY s.id
+            ORDER BY faltas DESC
+            LIMIT 5
+        ''', (f"{month_prefix}%",))
+        top_absents = [{"name": row[0], "count": row[1]} for row in cursor.fetchall()]
+
+        conn.close()
+        
+        return {
+            "month": f"{month}/{year}",
+            "presents": total_presents,
+            "absents": total_absents,
+            "attendance_rate": (total_presents / (total_presents + total_absents) * 100) if (total_presents + total_absents) > 0 else 0,
+            "top_absents": top_absents
+        }

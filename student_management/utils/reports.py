@@ -1,84 +1,170 @@
-from datetime import datetime
+import os
+from fpdf import FPDF
+from components.common import SnackBarMessage
+import flet as ft
 
-def generate_daily_report(data: dict) -> str:
-    """Gera relatorio diario em formato TXT"""
-    students = data['students']
-    
-    # --- CALCULOS DO RESUMO ---
-    total = len(students)
-    present_count = sum(1 for s in students if s['present'] == 1)
-    absent_count = sum(1 for s in students if s['present'] == 0)
-    pending_count = sum(1 for s in students if s['present'] is None)
-    
-    date_obj = datetime.strptime(data['date'], '%Y-%m-%d')
-    date_fmt = date_obj.strftime('%d/%m/%Y')
-    
-    lines = []
-    
-    # --- 1. CABECALHO E RESUMO (NO TOPO) ---
-    lines.append("=" * 60)
-    lines.append(f"RELATORIO DIARIO - {date_fmt} ({data['day_name']})")
-    lines.append("=" * 60)
-    lines.append(f"TOTAL DE ALUNOS: {total}")
-    lines.append("-" * 60)
-    lines.append(f"[+] Presentes:    {present_count}")
-    lines.append(f"[x] Faltas:       {absent_count}")
-    lines.append(f"[ ] Pendentes:    {pending_count}")
-    lines.append("=" * 60)
-    lines.append("")
-    
-    if not students:
-        lines.append(">> Nenhum aluno agendado para hoje.")
-        return "\n".join(lines)
-    
-    # --- 2. LISTAGEM DE ALUNOS ---
-    
-    # Ordena a lista: Primeiro por horario, depois por nome
-    # (Assim a lista fica organizada visualmente mesmo sem os cabecalhos de grupo)
-    students.sort(key=lambda x: (x['time'] or "ZZ", x['name']))
-    
-    for student in students:
-        # Preparacao dos dados
-        time = student['time'] if student['time'] else "Sem horario"
-        course = student['course']
-        name = student['name']
+class PDF(FPDF):
+    def header(self):
+        self.set_font('Arial', 'B', 15)
+        self.cell(0, 10, 'Student Manager Pro', 0, 1, 'C')
+        self.line(10, 20, 200, 20)
+        self.ln(10)
+
+    def footer(self):
+        self.set_y(-15)
+        self.set_font('Arial', 'I', 8)
+        self.cell(0, 10, f'Pagina {self.page_no()}', 0, 0, 'C')
+
+def clean_text(text):
+    """Remove caracteres que o FPDF padrão não suporta bem"""
+    if not text: return ""
+    return str(text).encode('latin-1', 'replace').decode('latin-1')
+
+def generate_daily_report(page: ft.Page, data: dict):
+    try:
+        pdf = PDF()
+        pdf.add_page()
+        pdf.set_font("Arial", size=12)
         
-        # Define o texto da presenca
-        if student['present'] == 1:
-            status = "SITUACAO: PRESENTE [+]"
-        elif student['present'] == 0:
-            status = "SITUACAO: FALTA [x]"
+        pdf.set_font("Arial", 'B', 14)
+        pdf.cell(0, 10, txt=clean_text(data['title']), ln=True, align='L')
+        pdf.ln(5)
+        
+        # Tabela
+        pdf.set_fill_color(240, 240, 240)
+        pdf.set_font("Arial", 'B', 10)
+        pdf.cell(60, 10, "Aluno", 1, 0, 'C', 1)
+        pdf.cell(50, 10, "Curso", 1, 0, 'C', 1)
+        pdf.cell(30, 10, "Horario", 1, 0, 'C', 1)
+        pdf.cell(50, 10, "Status", 1, 1, 'C', 1)
+        
+        pdf.set_font("Arial", size=10)
+        for student in data['students']:
+            if student['status'] == "Falta": pdf.set_text_color(200, 0, 0)
+            elif student['status'] == "Presente": pdf.set_text_color(0, 120, 0)
+            else: pdf.set_text_color(100, 100, 100)
+
+            pdf.cell(60, 10, clean_text(student['name'][:25]), 1)
+            pdf.cell(50, 10, clean_text(student['course'][:20]), 1)
+            pdf.cell(30, 10, clean_text(student['time']), 1)
+            pdf.cell(50, 10, clean_text(student['status']), 1, 1)
+            pdf.set_text_color(0, 0, 0)
+
+        open_pdf(page, pdf, "diario")
+    except Exception as e:
+        print(e)
+        SnackBarMessage.show(page, "Erro ao gerar PDF", False)
+
+def generate_monthly_report(page: ft.Page, data: dict):
+    try:
+        pdf = PDF()
+        pdf.add_page()
+        
+        pdf.set_font("Arial", 'B', 14)
+        pdf.cell(0, 10, txt=clean_text(data['title']), ln=True, align='L')
+        pdf.set_font("Arial", size=10)
+        pdf.cell(0, 10, txt=f"Periodo: {data['period']}", ln=True)
+        pdf.ln(5)
+        
+        pdf.set_fill_color(240, 240, 240)
+        pdf.set_font("Arial", 'B', 10)
+        pdf.cell(70, 10, "Aluno", 1, 0, 'C', 1)
+        pdf.cell(60, 10, "Curso", 1, 0, 'C', 1)
+        pdf.cell(20, 10, "Pres.", 1, 0, 'C', 1)
+        pdf.cell(20, 10, "Faltas", 1, 0, 'C', 1)
+        pdf.cell(20, 10, "%", 1, 1, 'C', 1)
+        
+        pdf.set_font("Arial", size=10)
+        for s in data['students']:
+            pdf.cell(70, 10, clean_text(s['name'][:30]), 1)
+            pdf.cell(60, 10, clean_text(s['course'][:25]), 1)
+            pdf.cell(20, 10, str(s['present']), 1, 0, 'C')
+            pdf.cell(20, 10, str(s['absent']), 1, 0, 'C')
+            pdf.cell(20, 10, s['percentage'], 1, 1, 'C')
+            
+        open_pdf(page, pdf, "mensal")
+    except Exception as e:
+        print(e)
+        SnackBarMessage.show(page, "Erro ao gerar PDF Mensal", False)
+
+def generate_financial_report(page: ft.Page, data: dict):
+    try:
+        pdf = PDF()
+        pdf.add_page()
+        
+        # Título
+        pdf.set_font("Arial", 'B', 16)
+        pdf.cell(0, 10, txt=clean_text(data['title']), ln=True, align='C')
+        pdf.ln(10)
+        
+        # 1. Receitas
+        pdf.set_font("Arial", 'B', 12)
+        pdf.set_fill_color(220, 255, 220) # Verde claro
+        pdf.cell(0, 10, " RECEITAS (Mensalidades)", 1, 1, 'L', 1)
+        
+        pdf.set_font("Arial", size=10)
+        for item in data['revenue_details']:
+            pdf.cell(80, 8, clean_text(item['student']), 0)
+            pdf.cell(70, 8, clean_text(item['course']), 0)
+            pdf.cell(40, 8, f"R$ {item['value']:.2f}", 0, 1, 'R')
+            
+        pdf.ln(2)
+        pdf.set_font("Arial", 'B', 11)
+        pdf.cell(150, 8, "TOTAL RECEITAS:", 0)
+        pdf.set_text_color(0, 150, 0)
+        pdf.cell(40, 8, f"R$ {data['total_revenue']:.2f}", 0, 1, 'R')
+        pdf.set_text_color(0, 0, 0)
+        pdf.ln(5)
+        
+        # 2. Despesas
+        pdf.set_font("Arial", 'B', 12)
+        pdf.set_fill_color(255, 220, 220) # Vermelho claro
+        pdf.cell(0, 10, " DESPESAS OPERACIONAIS", 1, 1, 'L', 1)
+        
+        pdf.set_font("Arial", size=10)
+        for name, value in data['expenses'].items():
+            pdf.cell(150, 8, clean_text(name), 0)
+            pdf.cell(40, 8, f"- R$ {value:.2f}", 0, 1, 'R')
+            
+        pdf.ln(2)
+        pdf.set_font("Arial", 'B', 11)
+        pdf.cell(150, 8, "TOTAL DESPESAS:", 0)
+        pdf.set_text_color(200, 0, 0)
+        pdf.cell(40, 8, f"- R$ {data['total_expenses']:.2f}", 0, 1, 'R')
+        pdf.set_text_color(0, 0, 0)
+        
+        # 3. Resumo Final (Lucro)
+        pdf.ln(10)
+        pdf.set_font("Arial", 'B', 14)
+        pdf.set_fill_color(200, 200, 200)
+        
+        # Cor do lucro (Verde se positivo, Vermelho se negativo)
+        profit = data['net_profit']
+        if profit >= 0:
+            pdf.set_text_color(0, 100, 0)
+            status = "LUCRO LIQUIDO"
         else:
-            status = "SITUACAO: PENDENTE [ ]"
+            pdf.set_text_color(200, 0, 0)
+            status = "PREJUIZO"
             
-        # LINHA 1: Nome - Curso - Turma
-        lines.append(f"ALUNO: {name} | CURSO: {course} | TURMA: {time}")
+        pdf.cell(150, 12, f"RESULTADO ({status}):", 1, 0, 'R')
+        pdf.cell(40, 12, f"R$ {profit:.2f}", 1, 1, 'R')
         
-        # LINHA 2: Presenca
-        lines.append(status)
-        
-        # LINHA 3: Observacao (se houver)
-        if student['note']:
-            lines.append(f"OBS: {student['note']}")
-            
-        # Separador entre alunos
-        lines.append("-" * 60)
-    
-    lines.append("")
-    lines.append("Gerado automaticamente pelo Sistema de Alunos")
-    
-    return "\n".join(lines)
+        open_pdf(page, pdf, "financeiro")
+    except Exception as e:
+        print(f"Erro financeiro: {e}")
+        SnackBarMessage.show(page, "Erro ao gerar PDF Financeiro", False)
 
-def save_report(content: str, filename: str) -> str:
-    """Salva relatorio em arquivo"""
-    import os
-    
-    folder = "relatorios"
-    os.makedirs(folder, exist_ok=True)
-    
-    filepath = os.path.join(folder, filename)
-    
-    with open(filepath, 'w', encoding='utf-8') as f:
-        f.write(content)
-    
-    return filepath
+def open_pdf(page, pdf, prefix):
+    filename = f"relatorio_{prefix}.pdf"
+    pdf.output(filename)
+    try:
+        os.startfile(filename)
+        SnackBarMessage.show(page, f"Gerado: {filename}", True)
+    except AttributeError:
+        # Tenta comando universal se não for Windows
+        import subprocess
+        try:
+            subprocess.call(['xdg-open', filename])
+        except:
+            SnackBarMessage.show(page, f"Salvo: {filename}", True)
