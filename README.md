@@ -1,16 +1,17 @@
-# Student Manager Pro 🎓
+# Student Manager Pro 
 
 ![Status](https://img.shields.io/badge/Status-Concluído-green)
 ![Python](https://img.shields.io/badge/Python-3.10%2B-blue)
 ![Flet](https://img.shields.io/badge/Flet-UI-purple)
 
-Um sistema moderno de gestão escolar focado em professores particulares e pequenas escolas. O projeto inclui gamificação para o professor, backups e temas visuais adaptáveis, .
+Um sistema moderno de gestão escolar focado em professores particulares e pequenas escolas. O projeto inclui gamificação para o professor, backups e temas visuais adaptáveis.
 
 ## Screenshots
 
 <div align="center">
-  <img src="caminho_para_seu_print_dashboard.png" width="45%">
-  <img src="caminho_para_seu_print_login.png" width="45%">
+  <img src="Prints_sistema/LogiinView.png" width="45%">
+  <img src="Prints_sistema/Dashboard.png" width="45%">
+  <img src="Prints_sistema/Profile.png" width="45%">
 </div>
 
 ## Funcionalidades
